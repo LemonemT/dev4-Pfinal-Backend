@@ -1,6 +1,6 @@
 const roles = {
-  USER: 'user',
-  ADMIN: 'admin',
+  RESIDENTE: 'residente',
+  ADMINISTRADOR: 'administrador',
 };
 
 export const validateRole = (role) => {
