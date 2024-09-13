@@ -15,7 +15,7 @@ export const validateJWT = async (req, res, next) => {
     const user = await Usuario.findByPk(decoded.id);
     if (!user) return res.status(403).json({ message: 'El JWT no pertenece a ningún usuario' });
 
-    req.user = user;
+    req.user = { id: user.id, role: user.role }; // Asegúrate de incluir el rol
     next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) return res.status(403).json({ message: 'El token ha expirado' });

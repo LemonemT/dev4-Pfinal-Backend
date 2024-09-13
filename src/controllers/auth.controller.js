@@ -38,7 +38,7 @@ class AuthController {
       }
 
       const token = jwt.sign({ id: user.id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
-      res.json({ token });
+      res.json({ token, role: user.role });
     } catch (error) {
       res.status(500).json({ message: 'Error interno del servidor' });
     }
