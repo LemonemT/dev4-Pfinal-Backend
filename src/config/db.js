@@ -7,6 +7,10 @@ const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   port: DB_PORT,
 });
 
+sequelize.sync({ alter: true }) 
+  .then(() => console.log('Database & tables created or updated'))
+  .catch(error => console.error('Error syncing with database:', error));
+
 export { sequelize };
 
 export const connectDB = async () => {

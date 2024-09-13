@@ -8,10 +8,18 @@ class AuthController {
     try {
       const { email, password, role } = req.body;
       const hashedPassword = await bcrypt.hash(password, 12);
-      const newUser = await Usuario.create({ email, password: hashedPassword, role });
+      const newUser = await Usuario.create({
+        email,
+        password: hashedPassword,
+        role
+      });
       res.status(201).json(newUser);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      console.error('Error al registrar usuario:', error);
+      if (error.name === 'SequelizeValidationError') {
+        return res.status(400).json({ message: 'Error de validación', details: error.errors });
+      }
+      res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 
@@ -32,7 +40,7 @@ class AuthController {
       const token = jwt.sign({ id: user.id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
       res.json({ token });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: 'Error interno del servidor' });
     }
   }
 }
