@@ -1,29 +1,35 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/db.js';
+import { sequelize } from '../config/db.js'; 
 
 const Incident = sequelize.define('Incident', {
-  subject: {
-    type: DataTypes.STRING,
+  titulo: {
+    type: DataTypes.STRING(255),
     allowNull: false
   },
-  type: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  description: {
+  descripcion: {
     type: DataTypes.TEXT,
     allowNull: false
   },
-  images: {
-    type: DataTypes.JSONB, 
-    allowNull: true,
-    defaultValue: []
+  tipo: {
+    type: DataTypes.STRING(100),
+    allowNull: false
   },
-  status: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: 'Pending' 
+  ubicacion: {
+    type: DataTypes.STRING(255),
+    allowNull: false
+  },
+  estado: {
+    type: DataTypes.ENUM('reportada', 'en proceso', 'resuelta'),
+    defaultValue: 'reportada'
+  },
+  imagenes: {
+    type: DataTypes.TEXT,
+    allowNull: true
   }
+}, {
+  timestamps: true, 
+  createdAt: 'created_at', 
+  updatedAt: 'updated_at' 
 });
 
 export default Incident;

@@ -1,25 +1,33 @@
-import multer, { diskStorage } from 'multer';
+import multer from 'multer';
+import path from 'path';
 
 
-const imageStorage = diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './src/uploads');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'src/uploads');  
   },
-  filename: function (req, file, cb) {
-    const newName = `${Date.now()}-${file.originalname}`;
-    cb(null, newName);
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, file.fieldname + '-' + uniqueSuffix + ext);
   }
 });
 
-const imageFilter = (req, file, cb) => {
-  const { mimetype } = file;
+
+const fileFilter = (req, file, cb) => {
   const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-
-  if (allowedTypes.includes(mimetype)) {
-    return cb(null, true);
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Tipo de archivo no permitido'), false);
   }
-
-  cb(new Error('Solo se permiten archivos de imagen'));
 };
 
-export const imageUpload = multer({ storage: imageStorage, fileFilter: imageFilter });
+
+const imagesUpload = multer({ 
+  storage,
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 } 
+});
+
+export { imagesUpload }; 

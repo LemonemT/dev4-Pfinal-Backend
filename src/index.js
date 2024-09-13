@@ -5,7 +5,7 @@ import { connectDB } from './config/db.js';
 import authRoutes from './routes/auth.routes.js';
 import incidentRoutes from './routes/incidents.routes.js';
 import userRoutes from './routes/users.routes.js';
-import { videosUpload } from './config/multer.js';
+import { imagesUpload } from './config/multer.js'; 
 
 const app = express();
 
@@ -14,8 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
 
+// Rutas
 app.use('/api/auth', authRoutes);
-app.use('/api/incidents', videosUpload.single('image'), incidentRoutes);
+app.use('/api/incidents', imagesUpload.array('images', 5), incidentRoutes);
 app.use('/api/users', userRoutes);
 
 app.listen(PORT, () => {

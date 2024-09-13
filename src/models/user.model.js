@@ -1,5 +1,6 @@
+import { sequelize } from '../config/db.js';
+
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.js';
 
 const Usuario = sequelize.define('Usuario', {
   email: {
@@ -12,9 +13,13 @@ const Usuario = sequelize.define('Usuario', {
     allowNull: false
   },
   role: {
-    type: DataTypes.ENUM('resident', 'admin'),
-    defaultValue: 'resident'
+    type: DataTypes.ENUM('residente', 'administrador'),
+    defaultValue: 'residente'
   }
+}, {
+  timestamps: true, // Esto habilita `createdAt` y `updatedAt`
+  createdAt: 'created_at',
+  updatedAt: 'updated_at'
 });
 
 export default Usuario;
